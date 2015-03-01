@@ -93,5 +93,3 @@ function ComplexNumber(a, b) {
 	return number;
 }
 
-ComplexNumber(Math.sqrt(3),1).display().polar().display().mult([2,0.5]).display().pow(.5).display();
-ComplexNumber(Math.sqrt(3),1).display().polar().display().mult([2,0.5]).display().rectangular().pow(.5).polar().display();
