@@ -1,3 +1,5 @@
+var ComplexNumber = require('./complexNumber.js')
+
 function Polynomial (list) {
 	var poly = list;
 	
@@ -14,7 +16,7 @@ function Polynomial (list) {
 			var res;
 			var coef;
 
-			if (current === 1) {
+			if (current === 1 && index !== 0) {
 				coef = '';
 			} else {
 				coef = 0 + current;
@@ -121,19 +123,36 @@ function Polynomial (list) {
 	poly.factor = function () {
 		var factors = [];
 		var newFactor;
+		var remainder;
 		if (this.length !== 0) {
 			factors.push(this[this.length - 1]);
 		}
 
 		if (this.length <= 1) {
 			console.log('there are no factors');
+			return this;
 		} else if (this.length === 2) {
 			newFactor = -this[0] / this[1];
 			factors.push(newFactor);
+			return Factored(factors);
+		} else if (this.length === 3) {
+			var A = ComplexNumber(-this[1] / (2 * this[2]), 0);
+			var C = ComplexNumber(- this[0] / this[2], 0);
+			newFactor = A.plus(A.pow(2).plus(C).pow(.5));
+			if (newFactor[1] === 0) {
+				remainder = this.divide(Polynomial([-newFactor[0], 1]));
+				var thing = remainder.factor();
+				thing.push(newFactor[0]);
+				return Factored(thing);
+			} else {
+				console.log('Non real result');
+				return this;
+			}
+			
 		} else {
 			console.log('No factors found');
+			return this;
 		}
-		return Factored(factors);
 	}
 
 	return poly;

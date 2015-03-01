@@ -42,7 +42,7 @@ function ComplexNumber(a, b) {
 	number.display = function () {
 		var rounded0 = Number(this[0].toFixed(15));
 		var rounded1 = Number(this[1].toFixed(15));
-		if (rounded0 === 0) {
+		if (rounded1 === 0) {
 			console.log(rounded0);
 		} else if (rounded0 === 0) {
 			console.log(rounded1 + 'i');
