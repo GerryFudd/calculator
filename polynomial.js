@@ -101,6 +101,12 @@ function Polynomial (list) {
 		return this.division(arr)[1];
 	}
 
+	poly.eval = function (num) {
+		return this.reduce(function (prev, current, ind) {
+			return prev + current * Math.pow(num, ind);
+		});
+	}
+
 	return poly;
 	
 }
