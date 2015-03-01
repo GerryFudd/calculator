@@ -1,4 +1,3 @@
-var tol = 14;
 function PolarNumber(a, b) {
 	var th;
 	if (b > 1 || b < -1) {
@@ -93,3 +92,4 @@ function ComplexNumber(a, b) {
 	return number;
 }
 
+module.exports = ComplexNumber;
