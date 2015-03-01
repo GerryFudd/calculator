@@ -12,21 +12,30 @@ function Polynomial (list) {
 	poly.display = function () {
 		var str = this.reduce(function (prev, current, index) {
 			var res;
+			var coef;
+
+			if (current === 1) {
+				coef = '';
+			} else {
+				coef = 0 + current;
+			}
+
 			if (current === 0) {
 				res = prev;
 			} else {
 				if (index === 0) {
-					res = prev + current;
+					res = prev + coef;
 				} else if (index === 1) {
-					res = prev + current + 'x';
+					res = prev + coef + 'x';
 				} else {
-					res = prev + current + 'x^' + index;
+					res = prev + coef + 'x^' + index;
 				}
 
 				if (index < poly.length - 1) {
 					res += ' + ';
 				}
 			}
+
 			return res;
 		}, '');
 		console.log(str);
@@ -102,13 +111,69 @@ function Polynomial (list) {
 	}
 
 	poly.eval = function (num) {
-		return this.reduce(function (prev, current, ind) {
+		var result = this.reduce(function (prev, current, ind) {
 			return prev + current * Math.pow(num, ind);
 		});
+		console.log(result);
+		return result;
+	}
+
+	poly.factor = function () {
+		var factors = [];
+		var newFactor;
+		if (this.length !== 0) {
+			factors.push(this[this.length - 1]);
+		}
+
+		if (this.length <= 1) {
+			console.log('there are no factors');
+		} else if (this.length === 2) {
+			newFactor = -this[0] / this[1];
+			factors.push(newFactor);
+		} else {
+			console.log('No factors found');
+		}
+		return Factored(factors);
 	}
 
 	return poly;
-	
+}
+
+function Factored (list) {
+	var prod = list;
+
+	prod.display = function () {
+		var str = '';
+		list.forEach(function (elem, index) {
+			if (index === 0) {
+				if (elem !== 1) {
+					str += elem;
+				}
+			} else {
+				if (elem === 0) {
+					str += 'x';
+				} else if (elem < 0) {
+					str += '(x + ' + (-elem) + ')';
+				} else {
+					str += '(x - ' + elem + ')';
+				}
+			}
+		});
+		console.log(str);
+		return this;
+	}
+
+	prod.expand = function () {
+		return this.reduce( function (prev, current, index) {
+			if (index === 0) {
+				return Polynomial([current]);
+			} else {
+				return prev.times([-current, 1]);
+			}
+		}, Polynomial([]));
+	}
+
+	return prod;
 }
 
 module.exports = Polynomial;
