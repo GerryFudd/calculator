@@ -21,7 +21,7 @@ function PolarNumber(a, b) {
 		return ComplexNumber(r, i);
 	}
 
-	number.mult = function(arr) {
+	number.times = function(arr) {
 		var r = this[0] * arr[0];
 		var th = this[1] + arr[1];
 		return PolarNumber(r, th);
@@ -64,14 +64,14 @@ function ComplexNumber(a, b) {
 		return ComplexNumber(r, i);
 	}
 
-	number.mult = function (arr) {
+	number.times = function (arr) {
 		var r = this[0] * arr[0] - this[1] * arr[1];
 		var i = this[0] * arr[1] + this[1] * arr[0];
 		return ComplexNumber(r, i);
 	}
 
 	number.mod = function () {
-		return Math.sqrt(this.mult(this.conjugate())[0]);
+		return Math.sqrt(this.times(this.conjugate())[0]);
 	}
 
 	number.polar = function() {
