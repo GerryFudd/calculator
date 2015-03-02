@@ -24,9 +24,9 @@ function PolarNumber(a, b) {
 	var number = [a, th];
 
 	number.textVersion = function () {
-		var rounded0 = Number(this[0].toFixed(tol));
-		var rounded1 = Number(this[1].toFixed(tol));
-		return rounded0 + 'e^(' + rounded1 + decodeURI(encodeURI('\u03C0')) + 'i)'
+		var value0 = 0 + this[0];
+		var value1 = 0 + this[1];
+		return value0 + 'e^(' + value1 + decodeURI(encodeURI('\u03C0')) + 'i)'
 	};
 
 	number.display = function () {
@@ -61,18 +61,18 @@ function ComplexNumber(a, b) {
 	var number = [real, imaginary];
 
 	number.textVersion = function () {
-		var rounded0 = Number(this[0].toFixed(15));
-		var rounded1 = Number(this[1].toFixed(15));
+		var value0 = 0 + this[0];
+		var value1 = 0 + this[1];
 		var str = '';
-		if (rounded1 === 1) {
-			rounded1 = '';
+		if (value1 === 1) {
+			value1 = '';
 		}
-		if (rounded1 === 0) {
-			str += rounded0;
-		} else if (rounded0 === 0) {
-			str += rounded1 + 'i';
+		if (value1 === 0) {
+			str += value0;
+		} else if (value0 === 0) {
+			str += value1 + 'i';
 		} else {
-			str += rounded0 + ' + ' + rounded1 + 'i';
+			str += value0 + ' + ' + value1 + 'i';
 		}
 		return str;
 	};

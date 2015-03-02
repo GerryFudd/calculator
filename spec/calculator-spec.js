@@ -5,6 +5,7 @@ var q = Polynomial([18,-15,3]);
 var p = Polynomial([-1, 1]);
 var z = ComplexNumber(0, 2);
 var w = ComplexNumber(1, 2);
+var x = ComplexNumber(-3, 5);
 
 var f = Polynomial([1, w, 2]);
 
@@ -14,7 +15,8 @@ describe('calculator', function () {
 		expect(q.factor().textVersion()).toEqual('3(x - 2)(x - 3)');
 		expect(q.factor().expand().textVersion()).toEqual('18 + -15x + 3x^2');
 		expect(f.factor().expand().textVersion()).toEqual(f.textVersion());
-		expect(f.factor().expand()).toEqual(f);
+		expect(f.factor().expand().evaluate(3).textVersion()).toEqual(f.evaluate(3).textVersion());
+		expect(f.factor().expand().evaluate(x).textVersion()).toEqual(f.evaluate(x).textVersion());
 		done();
 	});
 
@@ -25,7 +27,7 @@ describe('calculator', function () {
 
 	it('should have a ComplexNumber constructor that creates an object with several methods', function (done) {
 		expect(z.textVersion()).toEqual('2i');
-		expect(z.polar().textVersion()).toEqual('2e^(0.5' + decodeURI(encodeURI('\u03C0')) +'i)');
+		expect(z.polar().textVersion()).toEqual('2e^(0.5' + decodeURI(encodeURI('\u03C0')) + 'i)');
 		expect(z.pow(0.5).textVersion()).toEqual('1 + i');
 		expect(z.times([0, -1]).textVersion()).toEqual('2');
 		done();
