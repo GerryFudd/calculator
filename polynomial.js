@@ -1,10 +1,18 @@
-var ComplexNumber = require('./complexNumber.js')
+var ComplexNumber = require('./complexNumber.js');
 
 function Polynomial (list) {
 	var poly = list;
+
+	poly = poly.map(function (elem, index) {
+		if (typeof(elem) === 'number') {
+			return ComplexNumber(elem, 0);
+		} else {
+			return elem;
+		}
+	});
 	
 	var last = poly[poly.length - 1];
-	while (last === 0) {
+	while (last === ComplexNumber(0, 0)) {
 		poly.pop();
 		last = poly[poly.length - 1];
 	}	
@@ -16,13 +24,15 @@ function Polynomial (list) {
 			var res;
 			var coef;
 
-			if (current === 1 && index !== 0) {
+			if (current.textVersion() === '1' && index !== 0) {
 				coef = '';
+			} else if (current[1] === 0 || current[0] === 0) {
+				coef = current.textVersion();
 			} else {
-				coef = 0 + current;
+				coef = '(' + current.textVersion() + ')';
 			}
 
-			if (current === 0) {
+			if (current.textVersion() === '0') {
 				res = prev;
 			} else {
 				if (index === 0) {
@@ -42,7 +52,7 @@ function Polynomial (list) {
 		}, '');
 		console.log(str);
 		return this;
-	}
+	};
 
 	poly.plus = function(arr) {
 		var result = [];
@@ -50,7 +60,7 @@ function Polynomial (list) {
 		function add (short, long) {
 			long.forEach(function (elem, index) {
 				if (short[index]) {
-					result[index] = elem + short[index];
+					result[index] = elem.plus(short[index]);
 				} else {
 					result[index] = elem;
 				}
@@ -63,99 +73,130 @@ function Polynomial (list) {
 		}
 
 		return Polynomial(result);
-	}
+	};
 
-	poly.times = function(arr) {
+	poly.times = function(array) {
+		var arr = Polynomial(array);
 		var result = [];
 
 		this.forEach( function (elem, ind) {
 			arr.forEach( function (element, index) {
 				if (result[ind + index]) {
-					result[ind + index] += elem * element;
+					result[ind + index] = result[ind + index].plus(elem.times(element));
 				} else {
-					result[ind + index] = elem * element;
+					result[ind + index] = elem.times(element);
 				}
-			})
+			});
 		});
 
 		return Polynomial(result);
-	}
+	};
 
-	poly.division = function (arr) {
+	poly.division = function (array) {
+		// convert array to a polynomial
+		var arr = Polynomial(array);
+		// quotient is an empty polynomial to begin
 		var quotient = Polynomial([]);
-		if (this.length - arr.length >= 0) {
-			var quotDeg = this.length - arr.length;
-			var n;
-			for (n = 0; n < quotDeg; n++) {
+		// the remainder is the numberator to begin
+		var remainder = this;
+		var quotDeg;
+		var coef;
+		var n;
+		if (this.length >= arr.length) {
+			// quotDeg is the smallest nonzero term
+			quotDeg = this.length - arr.length;
+			for (n = 0; n < quotDeg + 1; n++) {
+				// place 0 in every place up to degree
 				quotient.push(0);
 			}
-			var coef = this[this.length - 1] / arr[arr.length - 1];
-			quotient.push(coef);
 		}
-		var remainder = this.plus(quotient.times(arr).times([-1]));
 
-		while (remainder.length >= arr.length) {
+		// repeat the process until the remainder is smaller than the divisor
+		var n = 0;
+		while (remainder.length >= arr.length && n < this.length + 1) {
+			// quotDeg is the smallest nonzero term
 			quotDeg = remainder.length - arr.length;
-			coef = remainder[remainder.length - 1] / arr[arr.length - 1];
+			// coef is the leading coefficient of the remainder divided by the leading coefficient of the denominator
+			coef = remainder[remainder.length - 1].times(arr[arr.length - 1].pow(-1));
+			// place the new term and make quotient into a polynomial
 			quotient[quotDeg] = coef;
-			remainder = this.plus(quotient.times(arr).times([-1]));
+			quotient = Polynomial(quotient);
+			// remainder = numerator - quotient * divisor
+			remainder = this.plus(quotient.times(arr).times([[-1, 0]]));
+			// clean up the remainder if its leading term wasn't removed
+			if (remainder.length === this.length - n) {
+				remainder.pop();
+				remainder = Polynomial(remainder);
+			}
+			n++;
 		}
 
 		return [Polynomial(quotient), remainder];
-	}
+	};
 
 	poly.divide = function (arr) {
 		return this.division(arr)[0];
-	}
+	};
 
 	poly.remainder = function (arr) {
 		return this.division(arr)[1];
-	}
+	};
 
-	poly.eval = function (num) {
+	poly.evaluate = function (number) {
+		var numb;
+		if (typeof(number) === 'number') {
+			numb = ComplexNumber(number, 0);
+		} else {
+			numb = number;
+		}
 		var result = this.reduce(function (prev, current, ind) {
-			return prev + current * Math.pow(num, ind);
+			return prev.plus(current.times(numb.pow(ind)));
 		});
-		console.log(result);
-		return result;
-	}
+		return result.display();
+	};
 
 	poly.factor = function () {
 		var factors = [];
 		var newFactor;
 		var remainder;
+
+		// The first value of factors is the coefficient of the whole
 		if (this.length !== 0) {
 			factors.push(this[this.length - 1]);
 		}
 
+		// Polynomials of degree 0 have no factors
 		if (this.length <= 1) {
 			console.log('there are no factors');
 			return this;
 		} else if (this.length === 2) {
-			newFactor = -this[0] / this[1];
+			// A polynomial of the form a + bx has a factor of the form -a / b
+			newFactor = this[0].times(this[1].pow(-1)).times([-1, 0]);
 			factors.push(newFactor);
 			return Factored(factors);
 		} else if (this.length === 3) {
 
-			var A = ComplexNumber(-this[1] / (2 * this[2]), 0);
-			var C = ComplexNumber(- this[0] / this[2], 0);
-			newFactor = A.plus(A.pow(2).plus(C).pow(.5));
-			
-			if (newFactor[1] === 0) {
-				remainder = this.divide(Polynomial([-newFactor[0], 1]));
-				var thing = remainder.factor();
-				thing.push(newFactor[0]);
-				return Factored(thing);
-			} else {
-				console.log('Non real result');
-				return this;
-			}
+			// A quadratic c + bx + ax^2 will have two roots
+			// The value A is -b / (2a)
+			var A = this[1].times(this[2].times([-2, 0]).pow(-1));
+			// The value C is -c / a
+			var C = this[0].times(this[2].pow(-1)).times([-1, 0]);
+			// The new factor is z = A + sqrt(A^2 + C)
+			newFactor = A.plus(A.pow(2).plus(C).pow(0.5));
+
+			// remainder is (c + bx + ax^2)/(x - z)
+			remainder = this.divide([newFactor.times([-1, 0]), 1]);
+
+			// thing is an array containing the factors of the remainder
+			var thing = remainder.factor();
+			thing.push(newFactor);
+			return Factored(thing);
 			
 		} else {
 			console.log('No factors found');
 			return this;
 		}
-	}
+	};
 
 	return poly;
 }
@@ -167,32 +208,32 @@ function Factored (list) {
 		var str = '';
 		list.forEach(function (elem, index) {
 			if (index === 0) {
-				if (elem !== 1) {
-					str += elem;
+				if (elem.textVersion() !== '1') {
+					str += elem.textVersion();
 				}
 			} else {
-				if (elem === 0) {
+				if (elem.textVersion() === '0') {
 					str += 'x';
-				} else if (elem < 0) {
-					str += '(x + ' + (-elem) + ')';
+				} else if (elem[0] > 0 && elem[1] === 0) {
+					str += '(x - ' + (elem.textVersion()) + ')';
 				} else {
-					str += '(x - ' + elem + ')';
+					str += '(x + ' + (elem.times([-1, 0]).textVersion()) + ')';
 				}
 			}
 		});
 		console.log(str);
 		return this;
-	}
+	};
 
 	prod.expand = function () {
 		return this.reduce( function (prev, current, index) {
 			if (index === 0) {
 				return Polynomial([current]);
 			} else {
-				return prev.times([-current, 1]);
+				return prev.times([current.times([-1, 0]), [1, 0]]);
 			}
 		}, Polynomial([]));
-	}
+	};
 
 	return prod;
 }

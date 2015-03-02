@@ -4,4 +4,4 @@ I wrote this calculator to perform operations on polynomials.  I have successful
 
 ### Next steps
 
-I want to create a program that will factor cubic polynomials.  This will require that polynomials are set up handle all operations with either real or complex inputs.
+I want to create a program that will factor cubic polynomials.  This will require that polynomials are set up handle all operations with either real or complex inputs.  This is ready as of the most recent commit.
