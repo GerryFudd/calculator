@@ -197,7 +197,6 @@ function Polynomial (list) {
 			return Factored(thing);
 			
 		} else {
-			console.log('No factors found');
 			return this;
 		}
 	};

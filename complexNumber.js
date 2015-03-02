@@ -4,14 +4,11 @@ function checkIfInt (argument) {
 	var i = argument;
 	var j = -i;
 	var test = Math.floor(i);
-	var htest = Math.ceil(i);
 	var jest = Math.floor(j);
 	if (i.toFixed(tol) === test.toFixed(tol)) {
-		i = test;
-	} else if (i.toFixed(tol) === htest.toFixed(tol)) {
-		i = htest;
+		i = 0 + test;
 	} else if (j.toFixed(tol) === jest.toFixed(tol)) {
-		i = -jest;
+		i = 0 - jest;
 	}
 	return i;
 }
