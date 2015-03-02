@@ -4,12 +4,21 @@ var ComplexNumber = require('../complexNumber.js')
 var q = Polynomial([18,-15,3]);
 var p = Polynomial([-1, 1]);
 var z = ComplexNumber(0, 2);
+var w = ComplexNumber(1, 2);
+
+var f = Polynomial([1, w, 2]);
 
 describe('calculator', function () {
-	it('should have a Polynomial constructor that creates an object with several methods', function (done) {
+	it('should have a Polynomial constructor that factors quadratics', function (done) {
 		expect(q.textVersion()).toEqual('18 + -15x + 3x^2');
 		expect(q.factor().textVersion()).toEqual('3(x - 2)(x - 3)');
 		expect(q.factor().expand().textVersion()).toEqual('18 + -15x + 3x^2');
+		expect(f.factor().expand().textVersion()).toEqual(f.textVersion());
+		expect(f.factor().expand()).toEqual(f);
+		done();
+	});
+
+	it('should have a Polynomial constructor that factors cubics', function (done) {
 		expect(q.times(p).factor().textVersion()).toEqual('3(x - 1)(x - 2)(x - 3)');
 		done();
 	});

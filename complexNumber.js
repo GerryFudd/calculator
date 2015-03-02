@@ -1,15 +1,17 @@
 var tol = 15;
 
-function checkIfZero (argument) {
+function checkIfInt (argument) {
 	var i = argument;
-	var j = -argument;
-	var test = 0;
+	var j = -i;
+	var test = Math.floor(i);
+	var htest = Math.ceil(i);
+	var jest = Math.floor(j);
 	if (i.toFixed(tol) === test.toFixed(tol)) {
-		i = 0;
-	} else if (j.toFixed(tol) === test.toFixed(tol)) {
-		i = 0;
-	} else {
-		console.log(i.toFixed(tol));
+		i = test;
+	} else if (i.toFixed(tol) === htest.toFixed(tol)) {
+		i = htest;
+	} else if (j.toFixed(tol) === jest.toFixed(tol)) {
+		i = -jest;
 	}
 	return i;
 }
@@ -38,7 +40,6 @@ function PolarNumber(a, b) {
 	number.rectangular = function () {
 		var r = this[0] * Math.cos(Math.PI * this[1]);
 		var i = this[0] * Math.sin(Math.PI * this[1]);
-		i = checkIfZero(i);
 		return ComplexNumber(r, i);
 	};
 
@@ -58,7 +59,9 @@ function PolarNumber(a, b) {
 }
 
 function ComplexNumber(a, b) {
-	var number = [a, b];
+	var real = checkIfInt(a);
+	var imaginary = checkIfInt(b);
+	var number = [real, imaginary];
 
 	number.textVersion = function () {
 		var rounded0 = Number(this[0].toFixed(15));
@@ -85,7 +88,6 @@ function ComplexNumber(a, b) {
 	number.plus = function(arr) {
 		var r = this[0] + arr[0];
 		var i = this[1] + arr[1];
-		i = checkIfZero(i);
 		return ComplexNumber(r, i);
 	};
 
@@ -98,7 +100,6 @@ function ComplexNumber(a, b) {
 	number.times = function (arr) {
 		var r = this[0] * arr[0] - this[1] * arr[1];
 		var i = this[0] * arr[1] + this[1] * arr[0];
-		i = checkIfZero(i);
 		return ComplexNumber(r, i);
 	};
 
