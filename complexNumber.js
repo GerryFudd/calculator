@@ -76,13 +76,17 @@ function ComplexNumber(a, b) {
 
 	number.polar = function() {
 		var r = this.mod();
-		var th;
-		if (this[1] >= 0) {
-			th = Math.acos(this[0] / r) / Math.PI;
+		if (r === 0) {
+			return PolarNumber(r, 0);
 		} else {
-			th = - Math.acos(this[0] / r) / Math.PI;
+			var th;
+			if (this[1] >= 0) {
+				th = Math.acos(this[0] / r) / Math.PI;
+			} else {
+				th = - Math.acos(this[0] / r) / Math.PI;
+			}
+			return PolarNumber(r, th);
 		}
-		return PolarNumber(r, th);
 	}
 
 	number.pow = function (num) {

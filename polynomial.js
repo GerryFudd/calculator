@@ -136,9 +136,11 @@ function Polynomial (list) {
 			factors.push(newFactor);
 			return Factored(factors);
 		} else if (this.length === 3) {
+
 			var A = ComplexNumber(-this[1] / (2 * this[2]), 0);
 			var C = ComplexNumber(- this[0] / this[2], 0);
 			newFactor = A.plus(A.pow(2).plus(C).pow(.5));
+			
 			if (newFactor[1] === 0) {
 				remainder = this.divide(Polynomial([-newFactor[0], 1]));
 				var thing = remainder.factor();
