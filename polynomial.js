@@ -198,6 +198,10 @@ function Polynomial (list) {
 		}
 	};
 
+	poly.expand = function () {
+		return this;
+	}
+
 	return poly;
 }
 
