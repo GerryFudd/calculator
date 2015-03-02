@@ -8,10 +8,14 @@ function PolarNumber(a, b) {
 	}
 	var number = [a, th];
 
-	number.display = function () {
+	number.textVersion = function () {
 		var rounded0 = Number(this[0].toFixed(15));
 		var rounded1 = Number(this[1].toFixed(15));
-		console.log(rounded0 + 'e^(' + rounded1 + decodeURI(encodeURI('\u03C0')) + 'i)');
+		return rounded0 + 'e^(' + rounded1 + decodeURI(encodeURI('\u03C0')) + 'i)'
+	};
+
+	number.display = function () {
+		console.log(this.textVersion());
 		return this;
 	};
 

@@ -19,7 +19,7 @@ function Polynomial (list) {
 
 	poly.degree = poly.length - 1;
 
-	poly.display = function () {
+	poly.textVersion = function () {
 		var str = this.reduce(function (prev, current, index) {
 			var res;
 			var coef;
@@ -50,7 +50,11 @@ function Polynomial (list) {
 
 			return res;
 		}, '');
-		console.log(str);
+		return str;
+	};
+
+	poly.display = function () {
+		console.log(this.textVersion());
 		return this;
 	};
 
@@ -112,7 +116,7 @@ function Polynomial (list) {
 		}
 
 		// repeat the process until the remainder is smaller than the divisor
-		var n = 0;
+		n = 0;
 		while (remainder.length >= arr.length && n < this.length + 1) {
 			// quotDeg is the smallest nonzero term
 			quotDeg = remainder.length - arr.length;
@@ -200,7 +204,7 @@ function Polynomial (list) {
 
 	poly.expand = function () {
 		return this;
-	}
+	};
 
 	return poly;
 }
@@ -208,7 +212,7 @@ function Polynomial (list) {
 function Factored (list) {
 	var prod = list;
 
-	prod.display = function () {
+	prod.textVersion = function () {
 		var str = '';
 		list.forEach(function (elem, index) {
 			if (index === 0) {
@@ -225,7 +229,11 @@ function Factored (list) {
 				}
 			}
 		});
-		console.log(str);
+		return str;
+	};
+
+	prod.display = function () {
+		console.log(this.textVersion());
 		return this;
 	};
 

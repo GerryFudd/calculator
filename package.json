@@ -1,0 +1,22 @@
+{
+  "name": "calculator",
+  "version": "1.0.0",
+  "description": "This is a calculator that performs all computations related to polynomials.",
+  "main": "calculator.js",
+  "scripts": {
+    "test": "`npm bin`/jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GerryFudd/calculator.git"
+  },
+  "author": "David Hasenjaeger",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GerryFudd/calculator/issues"
+  },
+  "homepage": "https://github.com/GerryFudd/calculator",
+  "dependencies": {
+    "jasmine": "^2.2.1"
+  }
+}
