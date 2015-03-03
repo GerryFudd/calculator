@@ -1,4 +1,4 @@
-var tol = 15;
+var tol = 10;
 
 function checkIfInt (argument) {
 	var i = argument;
@@ -6,8 +6,10 @@ function checkIfInt (argument) {
 	var test = Math.floor(i);
 	var jest = Math.floor(j);
 	if (i.toFixed(tol) === test.toFixed(tol)) {
+		// console.log('rounding ' + i + ' to ' + test + '.');
 		i = 0 + test;
 	} else if (j.toFixed(tol) === jest.toFixed(tol)) {
+		// console.log('rounding ' + i + ' to ' + (-jest) + '.');
 		i = 0 - jest;
 	}
 	return i;
@@ -56,8 +58,19 @@ function PolarNumber(a, b) {
 }
 
 function ComplexNumber(a, b) {
-	var real = checkIfInt(a);
-	var imaginary = checkIfInt(b);
+	var real;
+	var imaginary;
+	if (Math.floor(a) !== a) {
+		real = checkIfInt(a);
+	} else {
+		real = a;
+	}
+	if (Math.floor(b) !== b) {
+		imaginary = checkIfInt(b);
+	} else {
+		imaginary = b
+	}
+	
 	var number = [real, imaginary];
 
 	number.textVersion = function () {

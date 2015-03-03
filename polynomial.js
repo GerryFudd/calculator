@@ -7,7 +7,7 @@ function Polynomial (list) {
 		if (typeof(elem) === 'number') {
 			return ComplexNumber(elem, 0);
 		} else {
-			return elem;
+			return ComplexNumber(elem[0], elem[1]);
 		}
 	});
 	
@@ -121,18 +121,14 @@ function Polynomial (list) {
 			// quotDeg is the smallest nonzero term
 			quotDeg = remainder.length - arr.length;
 			// coef is the leading coefficient of the remainder divided by the leading coefficient of the denominator
-			console.log('coef');
-			coef = remainder[remainder.length - 1].times(arr[arr.length - 1].pow(-1)).display();
+			coef = remainder[remainder.length - 1].times(arr[arr.length - 1].pow(-1));
 			// place the new term and make quotient into a polynomial
 			quotient[quotDeg] = coef;
-			console.log('quotient');
-			quotient = Polynomial(quotient).display();
+			quotient = Polynomial(quotient);
 			// remainder = numerator - quotient * divisor
 			remainder = this.plus(quotient.times(arr).times([[-1, 0]]));
 			// clean up the remainder if its leading term wasn't removed
 			remainder = Polynomial(remainder.slice(0,this.length - n + 1));
-			console.log('remainder');
-			remainder.display();
 			n++;
 		}
 
@@ -157,7 +153,7 @@ function Polynomial (list) {
 		var result = this.reduce(function (prev, current, ind) {
 			return prev.plus(current.times(numb.pow(ind)));
 		});
-		return result.display();
+		return result;
 	};
 
 	poly.factor = function () {
@@ -193,15 +189,16 @@ function Polynomial (list) {
 			
 		} else if (this.length === 4) {
 
+			console.log('factor');
 			newFactor = cubicEquation(this);
-			console.log(newFactor);
-			// // remainder is (c + bx + ax^2)/(x - z)
-			// remainder = this.divide([newFactor.times([-1, 0]), 1]);
+			// remainder is (ax^3 + bx^2 + cx + d)/(x - newFactor)
+			console.log('remainder');
+			remainder = this.divide([newFactor.times([-1, 0]), 1]);
 
-			// // thing is an array containing the factors of the remainder
-			// var thing = remainder.factor();
-			// thing.push(newFactor);
-			return this;
+			// thing is an array containing the factors of the remainder
+			var thing = remainder.factor();
+			thing.push(newFactor);
+			return thing;
 			
 		} else {
 			return this;
@@ -227,15 +224,46 @@ function quadraticEquation (a, b, c) {
 }
 
 function cubicEquation (poly) {
+	// Divide everything by the leading coefficient x^3+Ax^2+Bx+C=(ax^3+bx^2+cx+d)/a
 	var reducedPoly = poly.divide([poly[3]]);
 	var A = reducedPoly[2];
 	var B = reducedPoly[1];
 	var C = reducedPoly[0];
-	var u = ComplexNumber(-3, 0).pow(-1);
-	var x = Polynomial([A.times(u),1]);
+	// Set thing = 1 / -3.  This value comes up repeatedly.
+	var thing = ComplexNumber(-3, 0).pow(-1);
+	// set x = t - A/3
+	var x = Polynomial([A.times(thing),1]);
+	// write a new polynomial by replacing x with t - A/3.  This new polynomial has no t^2 term.
+	// T=t^3+Mx+N
 	var T = x.times(x.times(x)).plus(x.times(x).times([A])).plus(x.times([B])).plus([C]);
+	var one = T[3];
+	var M = T[1];
+	var N = T[0];
+	// Suppose that there are complex numbers u and v.
+	// Then (u + v)^3 = u^3 + 3u^2v + 3uv^2 + v^3
+	//			(u + v)^3 = (3uv)(u + v) + u^3 + v^3
+	//			(u + v)^3 + (-3uv)(u + v) + (-u^3 + -v^3) = 0
+	// If there exist numbers u and v such that M = -3uv and N = -u^3 + -v^3, then t = u + v will satisfy
+	// t^3 + Mt + N = 0.
+	// I will solve for u.  First note that v = -M / (3u) and therefore N = -u^3 + M^3 / (3u)^3.
+	// This leads to (u^3)^2 + Nu^3 - (M / 3)^3 = 0.  Therefore, u^3 is a solution to x^2 + Nx - (M / 3)^3 = 0.
+	var uCubed = quadraticEquation(one, N, M.times(thing).pow(3));
+	// Since M = -3uv, we know that v = M / (-3u)
+	var vCubed = N.plus(uCubed).times([-1, 0]);
+	// Since t = u + v, this means that x = u + v - A / 3
+	// There are three values of u for a given uCubed.
+	var solution = uCubed.pow(1/3).plus(vCubed.pow(1/3)).plus(A.times(thing));
+	var n = 0;
+	var prod;
+	while (poly.evaluate(solution).textVersion() !== '0' && n < 2) {
+		n++;
+		prod = ComplexNumber(-1, 0).pow(2 / 3).pow(n);
+		solution = uCubed.pow(1/3).times(prod).plus(vCubed.pow(1/3).times(prod)).plus(A.times(thing));
+	}
 
-	return T.textVersion();
+	poly.evaluate(solution).display();
+
+	return solution;
 }
 
 function Factored (list) {

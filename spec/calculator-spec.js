@@ -8,7 +8,7 @@ var w = ComplexNumber(1, 2);
 var x = ComplexNumber(-3, 5);
 
 var f = Polynomial([1, w, 2]);
-var g = Polynomial([1, w, 2]);
+var g = Polynomial([72, 51, 88, 2]);
 
 describe('calculator', function () {
 	it('should have a Polynomial constructor that factors quadratics', function (done) {
@@ -29,10 +29,18 @@ describe('calculator', function () {
 
 	it('should have a Polynomial constructor that factors cubics', function (done) {
 		expect(q.times(p).factor().textVersion()).toEqual('3(x - 1)(x - 2)(x - 3)');
+		q.times(p).factor().slice(1,4).forEach(function (elem) {
+			expect(q.times(p).evaluate(elem).textVersion()).toEqual('0');
+		})
+		g.factor().slice(1,4).forEach(function (elem) {
+			expect(g.evaluate(elem).textVersion()).toEqual('0');
+		})
+		expect(g.factor().expand().textVersion()).toEqual(g.textVersion());
 		done();
 	});
 
 	it('should have a ComplexNumber constructor that creates an object with several methods', function (done) {
+		expect(ComplexNumber(0, 0).textVersion()).toEqual('0');
 		expect(z.textVersion()).toEqual('2i');
 		expect(z.polar().textVersion()).toEqual('2e^(0.5' + decodeURI(encodeURI('\u03C0')) + 'i)');
 		expect(z.pow(0.5).textVersion()).toEqual('1 + i');
