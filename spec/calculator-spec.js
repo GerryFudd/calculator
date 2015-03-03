@@ -8,6 +8,7 @@ var w = ComplexNumber(1, 2);
 var x = ComplexNumber(-3, 5);
 
 var f = Polynomial([1, w, 2]);
+var g = Polynomial([1, w, 2]);
 
 describe('calculator', function () {
 	it('should have a Polynomial constructor that factors quadratics', function (done) {
@@ -17,6 +18,12 @@ describe('calculator', function () {
 		expect(f.factor().expand().textVersion()).toEqual(f.textVersion());
 		expect(f.factor().expand().evaluate(3).textVersion()).toEqual(f.evaluate(3).textVersion());
 		expect(f.factor().expand().evaluate(x).textVersion()).toEqual(f.evaluate(x).textVersion());
+		done();
+	});
+
+	it('should have a Polynomial constructor that divides polynomials', function (done) {
+		expect(q.divide([3]).textVersion()).toEqual('6 + -5x + x^2');
+		expect(q.times(p).divide([3]).textVersion()).toEqual('-6 + 11x + -6x^2 + x^3');
 		done();
 	});
 

@@ -117,21 +117,22 @@ function Polynomial (list) {
 
 		// repeat the process until the remainder is smaller than the divisor
 		n = 0;
-		while (remainder.length >= arr.length && n < this.length + 1) {
+		while (remainder.length >= arr.length) {
 			// quotDeg is the smallest nonzero term
 			quotDeg = remainder.length - arr.length;
 			// coef is the leading coefficient of the remainder divided by the leading coefficient of the denominator
-			coef = remainder[remainder.length - 1].times(arr[arr.length - 1].pow(-1));
+			console.log('coef');
+			coef = remainder[remainder.length - 1].times(arr[arr.length - 1].pow(-1)).display();
 			// place the new term and make quotient into a polynomial
 			quotient[quotDeg] = coef;
-			quotient = Polynomial(quotient);
+			console.log('quotient');
+			quotient = Polynomial(quotient).display();
 			// remainder = numerator - quotient * divisor
 			remainder = this.plus(quotient.times(arr).times([[-1, 0]]));
 			// clean up the remainder if its leading term wasn't removed
-			if (remainder.length === this.length - n) {
-				remainder.pop();
-				remainder = Polynomial(remainder);
-			}
+			remainder = Polynomial(remainder.slice(0,this.length - n + 1));
+			console.log('remainder');
+			remainder.display();
 			n++;
 		}
 
@@ -180,13 +181,7 @@ function Polynomial (list) {
 			return Factored(factors);
 		} else if (this.length === 3) {
 
-			// A quadratic c + bx + ax^2 will have two roots
-			// The value A is -b / (2a)
-			var A = this[1].times(this[2].times([-2, 0]).pow(-1));
-			// The value C is -c / a
-			var C = this[0].times(this[2].pow(-1)).times([-1, 0]);
-			// The new factor is z = A + sqrt(A^2 + C)
-			newFactor = A.plus(A.pow(2).plus(C).pow(0.5));
+			newFactor = quadraticEquation(this[2], this[1], this[0]);
 
 			// remainder is (c + bx + ax^2)/(x - z)
 			remainder = this.divide([newFactor.times([-1, 0]), 1]);
@@ -195,6 +190,18 @@ function Polynomial (list) {
 			var thing = remainder.factor();
 			thing.push(newFactor);
 			return Factored(thing);
+			
+		} else if (this.length === 4) {
+
+			newFactor = cubicEquation(this);
+			console.log(newFactor);
+			// // remainder is (c + bx + ax^2)/(x - z)
+			// remainder = this.divide([newFactor.times([-1, 0]), 1]);
+
+			// // thing is an array containing the factors of the remainder
+			// var thing = remainder.factor();
+			// thing.push(newFactor);
+			return this;
 			
 		} else {
 			return this;
@@ -206,6 +213,29 @@ function Polynomial (list) {
 	};
 
 	return poly;
+}
+
+function quadraticEquation (a, b, c) {
+
+	// A quadratic c + bx + ax^2 will have two roots
+	// The value A is -b / (2a)
+	var A = b.times(a.times([-2,0]).pow(-1));
+	// The value C is -c / a
+	var C = c.times(a.pow(-1)).times([-1, 0]);
+	// The new factor is z = A + sqrt(A^2 + C)
+	return A.plus(A.pow(2).plus(C).pow(0.5));
+}
+
+function cubicEquation (poly) {
+	var reducedPoly = poly.divide([poly[3]]);
+	var A = reducedPoly[2];
+	var B = reducedPoly[1];
+	var C = reducedPoly[0];
+	var u = ComplexNumber(-3, 0).pow(-1);
+	var x = Polynomial([A.times(u),1]);
+	var T = x.times(x.times(x)).plus(x.times(x).times([A])).plus(x.times([B])).plus([C]);
+
+	return T.textVersion();
 }
 
 function Factored (list) {
