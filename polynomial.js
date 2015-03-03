@@ -257,11 +257,12 @@ function cubicEquation (poly) {
 	var v = getV(uCubed.pow(1/3));
 	var solution = uCubed.pow(1/3).plus(v).plus(A.times(thing));
 	var n = 0;
-	var prod;
+	var u;
 	while (poly.evaluate(solution).textVersion() !== '0' && n < 2) {
 		n++;
-		prod = ComplexNumber(-1, 0).pow(2 / 3).pow(n);
-		solution = uCubed.pow(1/3).times(prod).plus(v.times(prod)).plus(A.times(thing));
+		u = uCubed.pow(1/3).times(ComplexNumber(-1, 0).pow(n * 2 / 3));
+		v = getV(u);
+		solution = u.plus(v).plus(A.times(thing));
 	}
 
 	poly.evaluate(solution).display();
