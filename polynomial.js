@@ -249,16 +249,19 @@ function cubicEquation (poly) {
 	// This leads to (u^3)^2 + Nu^3 - (M / 3)^3 = 0.  Therefore, u^3 is a solution to x^2 + Nx - (M / 3)^3 = 0.
 	var uCubed = quadraticEquation(one, N, M.times(thing).pow(3));
 	// Since M = -3uv, we know that v = M / (-3u)
-	var vCubed = N.plus(uCubed).times([-1, 0]);
+	function getV (number) {
+		return M.times(number.times([-3, 0]).pow(-1));
+	}
 	// Since t = u + v, this means that x = u + v - A / 3
 	// There are three values of u for a given uCubed.
-	var solution = uCubed.pow(1/3).plus(vCubed.pow(1/3)).plus(A.times(thing));
+	var v = getV(uCubed.pow(1/3));
+	var solution = uCubed.pow(1/3).plus(v).plus(A.times(thing));
 	var n = 0;
 	var prod;
 	while (poly.evaluate(solution).textVersion() !== '0' && n < 2) {
 		n++;
 		prod = ComplexNumber(-1, 0).pow(2 / 3).pow(n);
-		solution = uCubed.pow(1/3).times(prod).plus(vCubed.pow(1/3).times(prod)).plus(A.times(thing));
+		solution = uCubed.pow(1/3).times(prod).plus(v.times(prod)).plus(A.times(thing));
 	}
 
 	poly.evaluate(solution).display();
