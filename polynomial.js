@@ -189,10 +189,8 @@ function Polynomial (list) {
 			
 		} else if (this.length === 4) {
 
-			console.log('factor');
 			newFactor = cubicEquation(this);
 			// remainder is (ax^3 + bx^2 + cx + d)/(x - newFactor)
-			console.log('remainder');
 			remainder = this.divide([newFactor.times([-1, 0]), 1]);
 
 			// thing is an array containing the factors of the remainder
@@ -265,8 +263,6 @@ function cubicEquation (poly) {
 		solution = u.plus(v).plus(A.times(thing));
 	}
 
-	poly.evaluate(solution).display();
-
 	return solution;
 }
 
@@ -278,7 +274,11 @@ function Factored (list) {
 		list.forEach(function (elem, index) {
 			if (index === 0) {
 				if (elem.textVersion() !== '1') {
-					str += elem.textVersion();
+					if(elem[0] === 0 || elem[1] === 0) {
+						str += elem.textVersion();
+					} else {
+						str += '(' + elem.textVersion() + ')';
+					}
 				}
 			} else {
 				if (elem.textVersion() === '0') {

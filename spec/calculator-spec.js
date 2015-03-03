@@ -7,8 +7,13 @@ var z = ComplexNumber(0, 2);
 var w = ComplexNumber(1, 2);
 var x = ComplexNumber(-3, 5);
 
+
+var c1 = ComplexNumber(71, 33);
+var c2 = ComplexNumber(2, 55);
+var c3 = ComplexNumber(61, 15);
 var f = Polynomial([1, w, 2]);
 var g = Polynomial([72, 51, 88, 2]);
+var h = Polynomial([c1, c2, c3]);
 
 describe('calculator', function () {
 	it('should have a Polynomial constructor that factors quadratics', function (done) {
@@ -35,7 +40,11 @@ describe('calculator', function () {
 		g.factor().slice(1,4).forEach(function (elem) {
 			expect(g.evaluate(elem).textVersion()).toEqual('0');
 		})
+		h.factor().slice(1,4).forEach(function (elem) {
+			expect(h.evaluate(elem).textVersion()).toEqual('0');
+		})
 		expect(g.factor().expand().textVersion()).toEqual(g.textVersion());
+		expect(h.factor().expand().textVersion()).toEqual(h.textVersion());
 		done();
 	});
 
