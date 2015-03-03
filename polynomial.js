@@ -254,11 +254,11 @@ function cubicEquation (poly) {
 	}
 	// Since t = u + v, this means that x = u + v - A / 3
 	// There are three values of u for a given uCubed.
-	var v = getV(uCubed.pow(1/3));
-	var solution = uCubed.pow(1/3).plus(v).plus(A.times(thing));
+	var solution = ComplexNumber(0, 0);
 	var n = 0;
 	var u;
-	while (poly.evaluate(solution).textVersion() !== '0' && n < 2) {
+	var v;
+	while (poly.evaluate(solution).textVersion() !== '0' && n < 3) {
 		n++;
 		u = uCubed.pow(1/3).times(ComplexNumber(-1, 0).pow(n * 2 / 3));
 		v = getV(u);
