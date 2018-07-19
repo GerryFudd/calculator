@@ -12,7 +12,7 @@ function Polynomial (list) {
 	});
 	
 	var last = poly[poly.length - 1];
-	while (last === ComplexNumber(0, 0)) {
+	while (last === new ComplexNumber(0, 0)) {
 		poly.pop();
 		last = poly[poly.length - 1];
 	}	
@@ -206,8 +206,6 @@ function Polynomial (list) {
 	poly.expand = function () {
 		return this;
 	};
-
-	return poly;
 }
 
 function quadraticEquation (a, b, c) {
@@ -307,8 +305,6 @@ function Factored (list) {
 			}
 		}, Polynomial([]));
 	};
-
-	return prod;
 }
 
 module.exports = Polynomial;

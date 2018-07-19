@@ -53,8 +53,6 @@ function PolarNumber(a, b) {
 		var th = this[1] * num;
 		return PolarNumber(r, th);
 	};
-
-	return number;
 }
 
 function ComplexNumber(a, b) {
@@ -135,8 +133,6 @@ function ComplexNumber(a, b) {
 	number.pow = function (num) {
 		return this.polar().pow(num).rectangular();
 	};
-
-	return number;
 }
 
 module.exports = ComplexNumber;

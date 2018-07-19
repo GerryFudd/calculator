@@ -4,7 +4,7 @@
   "description": "This is a calculator that performs all computations related to polynomials.",
   "main": "calculator.js",
   "scripts": {
-    "test": "`npm bin`/jasmine"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -18,5 +18,9 @@
   "homepage": "https://github.com/GerryFudd/calculator",
   "dependencies": {
     "jasmine": "^2.2.1"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0"
   }
 }
