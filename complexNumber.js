@@ -1,10 +1,10 @@
-var tol = 10;
+const tol = 10;
 
 function checkIfInt (argument) {
-	var i = argument;
-	var j = -i;
-	var test = Math.floor(i);
-	var jest = Math.floor(j);
+	let i = argument;
+	const j = -i;
+	const test = Math.floor(i);
+	const jest = Math.floor(j);
 	if (i.toFixed(tol) === test.toFixed(tol)) {
 		// console.log('rounding ' + i + ' to ' + test + '.');
 		i = 0 + test;
@@ -19,7 +19,7 @@ class PolarNumber {
 	constructor(a, b) {
 		this.r = a;
 		if (b > 1 || b < -1) {
-			var c = (b + 1) / 2;
+			const c = (b + 1) / 2;
 			this.th = (c - Math.floor(c)) * 2 - 1;
 		} else {
 			this.th = b;
@@ -36,8 +36,8 @@ class PolarNumber {
 	};
 
 	rectangular() {
-		var r = this.r * Math.cos(Math.PI * this.th);
-		var i = this.r * Math.sin(Math.PI * this.th);
+		const r = this.r * Math.cos(Math.PI * this.th);
+		const i = this.r * Math.sin(Math.PI * this.th);
 		return new ComplexNumber(r, i);
 	}
 
@@ -46,14 +46,14 @@ class PolarNumber {
 		if (!(arr instanceof PolarNumber)) {
 			multiplicand = new PolarNumber(...arr);
 		}
-		var r = this.r * multiplicand.r;
-		var th = this.th + multiplicand.th;
+		const r = this.r * multiplicand.r;
+		const th = this.th + multiplicand.th;
 		return new PolarNumber(r, th);
 	}
 
 	pow(num) {
-		var r = Math.pow(this.r, num);
-		var th = this.th * num;
+		const r = Math.pow(this.r, num);
+		const th = this.th * num;
 		return new PolarNumber(r, th);
 	}
 }
@@ -99,14 +99,14 @@ class ComplexNumber {
 		if (!(arr instanceof ComplexNumber)) {
 			summand = new ComplexNumber(...summand);
 		}
-		var r = this.real + summand.real;
-		var i = this.imaginary + summand.imaginary;
+		const r = this.real + summand.real;
+		const i = this.imaginary + summand.imaginary;
 		return new ComplexNumber(r, i);
 	}
 
 	conjugate() {
-		var r = this[0];
-		var i = -this[1];
+		const r = this[0];
+		const i = -this[1];
 		return new ComplexNumber(this.real, -1 * this.imaginary);
 	}
 
@@ -115,8 +115,8 @@ class ComplexNumber {
 		if (!(arr instanceof ComplexNumber)) {
 			multiplicand = new ComplexNumber(...multiplicand);
 		}
-		var r = this.real * multiplicand.real - this.imaginary * multiplicand.imaginary;
-		var i = this.real * multiplicand.imaginary + this.imaginary * multiplicand.real;
+		const r = this.real * multiplicand.real - this.imaginary * multiplicand.imaginary;
+		const i = this.real * multiplicand.imaginary + this.imaginary * multiplicand.real;
 		return new ComplexNumber(r, i);
 	}
 
@@ -125,11 +125,11 @@ class ComplexNumber {
 	};
 
 	polar() {
-		var r = this.mod();
+		const r = this.mod();
 		if (r === 0) {
 			return new PolarNumber(r, 0);
 		} else {
-			var th;
+			let th;
 			if (this.imaginary >= 0) {
 				th = Math.acos(this.real / r) / Math.PI;
 			} else {

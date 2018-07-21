@@ -1,4 +1,4 @@
-var ComplexNumber = require('./complexNumber');
+const ComplexNumber = require('./complexNumber');
 
 class Polynomial {
 	constructor(list) {
@@ -30,8 +30,8 @@ class Polynomial {
 
 	textVersion() {
 		return this.coefficients.reduce((prev, current, index) => {
-			var res;
-			var coef;
+			let res;
+			let coef;
 
 			if (current.textVersion() === '1' && index !== 0) {
 				coef = '';
@@ -76,7 +76,7 @@ class Polynomial {
 		if (!(arr instanceof Polynomial)) {
 			summand = new Polynomial(summand);
 		}
-		var result = [];
+		const result = [];
 
 		const add = (short, long) => {
 			long.forEach((elem, index) => {
@@ -103,7 +103,7 @@ class Polynomial {
 		} else {
 			arr = new Polynomial(array);
 		}
-		var result = [];
+		const result = [];
 
 		this.coefficients.forEach((elem, ind) => {
 			arr.coefficients.forEach((element, index) => {
@@ -166,22 +166,22 @@ class Polynomial {
 	}
 
 	evaluate(number) {
-		var numb;
+		let numb;
 		if (typeof(number) === 'number') {
 			numb = new ComplexNumber(number, 0);
 		} else {
 			numb = number;
 		}
-		var result = this.coefficients.reduce(function (prev, current, ind) {
+		const result = this.coefficients.reduce(function (prev, current, ind) {
 			return prev.plus(current.times(numb.pow(ind)));
 		});
 		return result;
 	}
 
 	factor() {
-		var factors = [];
-		var newFactor;
-		var remainder;
+		const factors = [];
+		let newFactor;
+		let remainder;
 
 		// The first value of factors is the coefficient of the whole
 		if (this.degree !== -1) {
@@ -208,7 +208,7 @@ class Polynomial {
 			remainder = this.divide([newFactor.times([-1, 0]), 1]);
 
 			// thing is an array containing the factors of the remainder
-			var thing = remainder.factor();
+			const thing = remainder.factor();
 			thing.factors.push(newFactor);
 			return thing;
 		}
@@ -219,7 +219,7 @@ class Polynomial {
 			remainder = this.divide([newFactor.times([-1, 0]), 1]);
 
 			// thing is an array containing the factors of the remainder
-			var thing = remainder.factor();
+			const thing = remainder.factor();
 			thing.factors.push(newFactor);
 			return thing;
 		}
@@ -236,29 +236,29 @@ function quadraticEquation (a, b, c) {
 
 	// A quadratic c + bx + ax^2 will have two roots
 	// The value A is -b / (2a)
-	var A = b.times(a.times([-2,0]).pow(-1));
+	const A = b.times(a.times([-2,0]).pow(-1));
 	// The value C is -c / a
-	var C = c.times(a.pow(-1)).times([-1, 0]);
+	const C = c.times(a.pow(-1)).times([-1, 0]);
 	// The new factor is z = A + sqrt(A^2 + C)
 	return A.plus(A.pow(2).plus(C).pow(0.5));
 }
 
 function cubicEquation (poly) {
 	// Divide everything by the leading coefficient x^3+Ax^2+Bx+C=(ax^3+bx^2+cx+d)/a
-	var reducedPoly = poly.divide([poly.coefficients[3]]);
-	var A = reducedPoly.coefficients[2];
-	var B = reducedPoly.coefficients[1];
-	var C = reducedPoly.coefficients[0];
+	const reducedPoly = poly.divide([poly.coefficients[3]]);
+	const A = reducedPoly.coefficients[2];
+	const B = reducedPoly.coefficients[1];
+	const C = reducedPoly.coefficients[0];
 	// Set thing = 1 / -3.  This value comes up repeatedly.
-	var thing = new ComplexNumber(-3, 0).pow(-1);
+	const thing = new ComplexNumber(-3, 0).pow(-1);
 	// set x = t - A/3
-	var x = new Polynomial([A.times(thing),1]);
+	const x = new Polynomial([A.times(thing),1]);
 	// write a new polynomial by replacing x with t - A/3.  This new polynomial has no t^2 term.
 	// T=t^3+Mx+N
-	var T = x.times(x.times(x)).plus(x.times(x).times([A])).plus(x.times([B])).plus([C]);
-	var one = T.coefficients[3];
-	var M = T.coefficients[1];
-	var N = T.coefficients[0];
+	const T = x.times(x.times(x)).plus(x.times(x).times([A])).plus(x.times([B])).plus([C]);
+	const one = T.coefficients[3];
+	const M = T.coefficients[1];
+	const N = T.coefficients[0];
 	// Suppose that there are complex numbers u and v.
 	// Then (u + v)^3 = u^3 + 3u^2v + 3uv^2 + v^3
 	//			(u + v)^3 = (3uv)(u + v) + u^3 + v^3
@@ -267,17 +267,17 @@ function cubicEquation (poly) {
 	// t^3 + Mt + N = 0.
 	// I will solve for u.  First note that v = -M / (3u) and therefore N = -u^3 + M^3 / (3u)^3.
 	// This leads to (u^3)^2 + Nu^3 - (M / 3)^3 = 0.  Therefore, u^3 is a solution to x^2 + Nx - (M / 3)^3 = 0.
-	var uCubed = quadraticEquation(one, N, M.times(thing).pow(3));
+	const uCubed = quadraticEquation(one, N, M.times(thing).pow(3));
 	// Since M = -3uv, we know that v = M / (-3u)
 	function getV (number) {
 		return M.times(number.times([-3, 0]).pow(-1));
 	}
 	// Since t = u + v, this means that x = u + v - A / 3
 	// There are three values of u for a given uCubed.
-	var solution = new ComplexNumber(0, 0);
-	var n = -1;
-	var u;
-	var v;
+	let solution = new ComplexNumber(0, 0);
+	let n = -1;
+	let u;
+	let v;
 	while (poly.evaluate(solution).textVersion() !== '0' && n < 2) {
 		n++;
 		u = uCubed.pow(1/3).times(new ComplexNumber(-1, 0).pow(n * 2 / 3));
@@ -294,7 +294,7 @@ class Factored {
 	}
 
 	textVersion() {
-		var str = '';
+		let str = '';
 		this.factors.forEach((elem, index) => {
 			if (index === 0) {
 				if (elem.textVersion() !== '1') {
