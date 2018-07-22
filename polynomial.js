@@ -118,9 +118,12 @@ class Polynomial {
 		return new Polynomial(result);
 	};
 
-	division(array) {
-		// convert array to a polynomial
-		const arr = new Polynomial(array);
+	division(divisorArg) {
+		let divisor = divisorArg;
+		if (!(divisor instanceof Polynomial)) {
+			// convert array to a polynomial
+			divisor = new Polynomial(divisorArg);
+		}
 		// quotient is an empty polynomial to begin
 		let quotient = new Polynomial([]);
 		// the remainder is the numberator to begin
@@ -128,9 +131,9 @@ class Polynomial {
 		let quotDeg;
 		let coef;
 		let n;
-		if (this.degree >= arr.degree) {
+		if (this.degree >= divisor.degree) {
 			// quotDeg is the smallest nonzero term
-			quotDeg = this.degree - arr.degree;
+			quotDeg = this.degree - divisor.degree;
 			for (n = 0; n < quotDeg + 1; n++) {
 				// place 0 in every place up to degree
 				quotient.push(new ComplexNumber(0, 0));
@@ -139,16 +142,16 @@ class Polynomial {
 
 		// repeat the process until the remainder is smaller than the divisor
 		n = 0;
-		while (remainder.degree >= arr.degree) {
+		while (remainder.degree >= divisor.degree) {
 			// quotDeg is the smallest nonzero term
-			quotDeg = remainder.degree - arr.degree;
+			quotDeg = remainder.degree - divisor.degree;
 			// coef is the leading coefficient of the remainder divided by the leading coefficient of the denominator
-			coef = remainder.coefficients[remainder.degree].times(arr.coefficients[arr.degree].pow(-1));
+			coef = remainder.coefficients[remainder.degree].times(divisor.coefficients[divisor.degree].pow(-1));
 			// place the new term and make quotient into a polynomial
 			quotient.coefficients[quotDeg] = coef;
 			quotient = new Polynomial(quotient.coefficients);
 			// remainder = numerator - quotient * divisor
-			remainder = this.plus(quotient.times(arr).times([[-1, 0]]));
+			remainder = this.plus(quotient.times(divisor).times([[-1, 0]]));
 			// clean up the remainder if its leading term wasn't removed
 			remainder = new Polynomial(remainder.coefficients.slice(0,this.coefficients.length - n + 1));
 			n++;

@@ -1,21 +1,36 @@
-const tol = 10;
+const TOL = 10;
 
-function checkIfInt (argument) {
-	let i = argument;
+/**
+ * Returns an integer if numeric is within 10^-TOL of that integer.  Otherwise it returns numeric.
+ * @param {Number} numeric 
+ */
+function checkIfInt (numeric) {
+	let i = numeric;
 	const j = -i;
 	const test = Math.floor(i);
 	const jest = Math.floor(j);
-	if (i.toFixed(tol) === test.toFixed(tol)) {
+	if (i.toFixed(TOL) === test.toFixed(TOL)) {
 		// console.log('rounding ' + i + ' to ' + test + '.');
 		i = 0 + test;
-	} else if (j.toFixed(tol) === jest.toFixed(tol)) {
+	} else if (j.toFixed(TOL) === jest.toFixed(TOL)) {
 		// console.log('rounding ' + i + ' to ' + (-jest) + '.');
 		i = 0 - jest;
 	}
 	return i;
 }
 
+/**
+ * Class that represents a complex number as a pair of polar coordinates in the complex plane.
+ */
 class PolarNumber {
+	/**
+	 * Constructor that takes a, which represents the norm of a complex number, and b, which represents
+	 * the number of half fotations from the positive real axis. It sets this.r = a and this.th to a
+	 * number of half rotations between 1 and -1 that is equivalent to b.
+	 * @param {Number} a 
+	 * @param {Number} b 
+	 * @constructor
+	 */
 	constructor(a, b) {
 		this.r = a;
 		if (b > 1 || b < -1) {
@@ -26,6 +41,10 @@ class PolarNumber {
 		}
 	}
 
+	/**
+	 * Creates a text representation of the polar number as re^(i*pi*b)
+	 * @returns {text}
+	 */
 	textVersion() {
 		return this.r + 'e^(' + this.th + decodeURI(encodeURI('\u03C0')) + 'i)'
 	}
@@ -58,20 +77,33 @@ class PolarNumber {
 	}
 }
 
+/**
+ * A representation of a complex number as a real part and an imaginary part.
+ */
 class ComplexNumber {
-	constructor(a, b) {
-		if (Math.floor(a) !== a) {
-			this.real = checkIfInt(a);
+	/**
+	 * This constructor sets the real and imaginary parts of a complex number, but sets those
+	 * values as integers if they are close enough to that integer.
+	 * @param {Number} real 
+	 * @param {Number} imaginary 
+	 */
+	constructor(real, imaginary) {
+		if (Math.floor(real) !== real) {
+			this.real = checkIfInt(real);
 		} else {
-			this.real = a;
+			this.real = real;
 		}
-		if (Math.floor(b) !== b) {
-			this.imaginary = checkIfInt(b);
+		if (Math.floor(imaginary) !== imaginary) {
+			this.imaginary = checkIfInt(imaginary);
 		} else {
-			this.imaginary = b
+			this.imaginary = imaginary
 		}
 	}
 
+	/**
+	 * Returns a string representation of the complex number as 'real + (imaginary)i'
+	 * @returns {String} textVersion
+	 */
 	textVersion() {
 		const {real, imaginary} = this;
 		let str = '';
