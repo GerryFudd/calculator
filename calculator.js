@@ -1,5 +1,7 @@
-var ComplexNumber = require('./complexNumber.js');
-var Polynomial = require('./polynomial.js');
+const ComplexNumber = require('./complexNumber');
+const Polynomial = require('./polynomial');
 
-var z = ComplexNumber(0, -2);
-Polynomial([2, z, 3]).display().factor().display().expand().display();
+module.exports = {
+  ComplexNumber,
+  Polynomial
+};
