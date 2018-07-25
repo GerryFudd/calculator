@@ -175,10 +175,10 @@ class Polynomial {
 		} else {
 			numb = number;
 		}
-		const result = this.coefficients.reduce(function (prev, current, ind) {
+
+		return this.coefficients.reduce(function (prev, current, ind) {
 			return prev.plus(current.times(numb.pow(ind)));
-		});
-		return result;
+		}, new ComplexNumber(0, 0));
 	}
 
 	factor() {
