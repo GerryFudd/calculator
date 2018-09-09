@@ -106,19 +106,27 @@ class ComplexNumber {
 	 */
 	textVersion() {
 		const {real, imaginary} = this;
-		let str = '';
-		let imaginaryPart = `${imaginary}`;
-		if (imaginary === 1) {
+		if (imaginary === 0) {
+			return `${real}`;
+		}
+
+		if (real === 0) {
+			if (imaginary === 1) {
+				return 'i';
+			}
+
+			if (imaginary === -1) {
+				return '-i';
+			}
+
+			return `${imaginary}i`;
+		}
+		let imaginaryPart = `${Math.abs(imaginary)}`;
+		const pm = imaginary > 0 ? '+' : '-';
+		if (imaginaryPart === '1') {
 			imaginaryPart = '';
 		}
-		if (imaginary === 0) {
-			str += real;
-		} else if (real === 0) {
-			str += imaginaryPart + 'i';
-		} else {
-			str += real + ' + ' + imaginaryPart + 'i';
-		}
-		return str;
+		return `${real} ${pm} ${imaginaryPart}i`;
 	}
 
 	display() {

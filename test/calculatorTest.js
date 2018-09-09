@@ -60,6 +60,28 @@ describe('ComplexNumber', () => {
 	it('should implement a times method that correctly performs complex when the second argument is an array of two numbers', () => {
 		expect(z.times([0, -1]).textVersion()).to.equal('2');
 	});
+
+	describe('textVersion', () => {
+		const testCases = [
+			{testNumber: {real: 0, imaginary: 0}, textVersion: '0'},
+			{testNumber: {real: 1, imaginary: 0}, textVersion: '1'},
+			{testNumber: {real: 0, imaginary: 1}, textVersion: 'i'},
+			{testNumber: {real: 1, imaginary: 1}, textVersion: '1 + i'},
+			{testNumber: {real: -1, imaginary: 0}, textVersion: '-1'},
+			{testNumber: {real: 0, imaginary: -1}, textVersion: '-i'},
+			{testNumber: {real: 0, imaginary: -2}, textVersion: '-2i'},
+			{testNumber: {real: -1, imaginary: -1}, textVersion: '-1-i'},
+			{testNumber: {real: -1, imaginary: -2}, textVersion: '-1-2i'},
+			{testNumber: {real: 1, imaginary: -1}, textVersion: '1-i'},
+			{testNumber: {real: 1, imaginary: -2}, textVersion: '1-2i'},
+			{testNumber: {real: -1, imaginary: 1}, textVersion: '-1+i'}
+		];
+		it('should render the appropriate text version of a complex number', () => {
+			testCases.forEach(({testNumber: {real, imaginary}, textVersion}) => {
+				expect(new ComplexNumber(real, imaginary).textVersion().replace(/ /g, '')).to.equal(textVersion.replace(/ /g, ''));
+			})
+		});
+	})
 });
 
 describe('Polynomial', function () {
@@ -84,7 +106,7 @@ describe('Polynomial', function () {
 
 	it('should evaluate each polynomial to the correct number', () => {
 		expect(q.evaluate(new ComplexNumber(1, 0)).textVersion()).to.equal('6');
-		expect(q.evaluate(new ComplexNumber(0, 1)).textVersion()).to.equal('15 + -15i');
+		expect(q.evaluate(new ComplexNumber(0, 1)).textVersion()).to.equal('15 - 15i');
 		expect(q.evaluate(1).textVersion()).to.equal('6');
 	});
 
