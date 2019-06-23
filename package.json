@@ -1,7 +1,7 @@
 {
-  "name": "calculator",
+  "name": "complex-calculator",
   "version": "1.0.0",
-  "description": "This is a calculator that performs all computations related to polynomials.",
+  "description": "This is a calculator that performs computations related to complex numbers and polynomials.",
   "main": "calculator.js",
   "scripts": {
     "test": "mocha"
@@ -11,7 +11,7 @@
     "url": "https://github.com/GerryFudd/calculator.git"
   },
   "author": "David Hasenjaeger",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/GerryFudd/calculator/issues"
   },
