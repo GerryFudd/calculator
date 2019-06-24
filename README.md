@@ -113,6 +113,115 @@ console.log(a.polar().times(b.polar()).rectangular().textVersion()) // -2
   - multiplicand (PolarNumber | Array)<sup>2</sup>
 - Returns: PolarNumber
 
+### The `Polynomial` class
+
+```JavaScript
+import {Polynomial, ComplexNumber} from 'complex-calculator';
+
+const p = new Polynomial([-1, 0, 1]);
+
+console.log(p.textVersion()) // -1 + x^2
+console.log(p.factor().textVersion()) // (x + 1)(x - 1)
+
+const a = new ComplexNumber(-2, 4);
+const q = new Polynomial([a, [1, 2], 1]);
+console.log(q.textVersion()) // (-2 + 4i) + (1 + 2i)x + x^2
+console.log(q.factor().textVersion()) // (x + 2)(x + -1 + 2i)
+```
+
+#### Constructor
+
+- Arguments:
+  - coefficients ((Number | ComplexNumber | Array)<sup>1</sup>[])
+
+#### Attributes
+
+`coefficients` (ComplexNumber[]): the list of coefficients of the polynomial. The index of each element of the list corresponds to the order of the term for that coefficient.
+
+`degree` (Number): the largest power that appears in any of the terms of the polynomial.
+
+#### Methods
+
+`display`: logs the textVersion of the polynomial and returns the polynomial.
+- Returns: Polynomial
+
+`divide`: divides the polynomial by another polynomial and returns just the quotient (similar to the way that integer division works in c based languages).
+- Arguments:
+  - divisor (Polynomial | Array)<sup>3</sup>
+- Returns: Polynomial
+
+`division`[sic]: divides the polynomial by another polynomial. The result is represented as a quotient and a remainder.
+
+    _.isEqual(p.division(q), {quotient: r, remainder: s})
+
+exactly when
+
+    _.isEqual(p, q.times(r).plus(s))
+
+- Arguments:
+  - divisor (Polynomial | Array)<sup>3</sup>
+- Returns: {quotient: Polynomial, remainder: Polynomial}
+
+`evaluate`: returns the output of the polynomial function for a given input.
+- Arguments:
+  - input (ComplexNumber | Number)<sup>4</sup>
+- Returns: ComplexNumber
+
+`expand`: returns the polynomial (used for consistency when using `factor`).
+- Returns: Polynomial
+
+`factor`: returns a factored representation of the polynomial if the polynomial's degree is less than or equal to 3.
+- Returns: (ComplexNumber | Polynomial)
+
+`plus`: adds the polynomial function to another polynomial function.
+- Arguments:
+  - summand (Polynomial | Array)<sup>3</sup>
+- Returns: Polynomial
+
+`push`: adds another term to the polynomial with an order one higher than the current degree of the polynomial.
+- Arguments
+  - coefficient (ComplexNumber)
+- Returns: `undefined`
+
+`remainder`: divides the polynomial by another polynomial and returns just the remainder (similar to the modulus of two integers).
+- Arguments:
+  - divisor (Polynomial | Array)<sup>3</sup>
+- Returns: Polynomial
+
+`textVersion`: a string representing the way that a person would write the polynomial long hand. Uses "^" to denote exponentiation.
+- Returns: String
+
+`times`: multiplies the polynomial function by another polynomial function.
+- Arguments:
+  - multiplicand (Polynomial | Array)<sup>3</sup>
+- Returns: Polynomial
+
+### The `Factored` class
+
+This is another class that is only indirectly exposed.
+
+#### Attributes
+
+`factors` (ComplexNumber[]): this is a slight misnomer in a mathematical sense. The first element in this array is the coefficient of the largest order term of the polynomial. The remaining values are the input values of the factored polynomial that will result in an output of 0.
+
+#### Methods
+
+`display`: logs the textVersion of the factored polynomial and returns the factored polynomial.
+- Returns: Factored
+
+`expand`: returns the polynomial that the factored polynomial came from.
+- Returns: Polynomial
+
+`textVersion`: a string representing the polynomial as a product of binomials. If the factored polynomial has `factors` [a<sub>0</sub>,a<sub>1</sub>,...,a<sub>n</sub>], then the string will look like a<sub>0</sub>(x + -a<sub>1</sub>)...(x + -a<sub>n</sub>).
+
+Note that a<sub>0</sub> is not a factor. It was merely convenient to use the 0th element of the `factors` array for this value.
+- Returns: String
+
+___
 1: If the argument is an array, it will be interpreted as `[<real part>, <imaginary part>]`.
 
 2: If the argument is an array, it will be interpreted as `[<modulus>, <angle>]` where the angle will be the `th` attribute of the polar number.
+
+3: If the argument is an array, it will be interpreted as `new Polynomial(argument)`.
+
+4: If the argument is a Number, it will be interpreted as `new ComplexNumber(argument, 0)`.
